@@ -17,6 +17,12 @@ class CreateTransactionService {
   }
 
   public execute({ title, value, type }: RequestDTO): Transaction {
+    const { total } = this.transactionsRepository.getBalance();
+
+    if (type === 'outcome' && Number(value) > Number(total)) {
+      throw Error(`You don't have this amount to spend.`);
+    }
+
     const transaction = this.transactionsRepository.create({
       title,
       value,
