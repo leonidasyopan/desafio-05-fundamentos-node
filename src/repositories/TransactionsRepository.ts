@@ -26,21 +26,21 @@ class TransactionsRepository {
   }
 
   public getBalance(): Balance {
-    this.transactions.map(transaction => {
-      let income = 0;
-      let outcome = 0;
-      if (transaction.type === 'income') {
-        income = Number(transaction.value).reduce((total, currentValue) => {
-          return total + currentValue;
-        });
-      } else {
-        outcome = Number(transaction.value).reduce((total, currentValue) => {
-          return total + currentValue;
-        });
-      }
+    const income = this.transactions
+      .filter(transaction => transaction.type === 'income')
+      .reduce((total, currentItem) => total + Number(currentItem.value), 0);
 
-      return income - outcome;
-    });
+    const outcome = this.transactions
+      .filter(transaction => transaction.type === 'outcome')
+      .reduce((total, currentItem) => total + Number(currentItem.value), 0);
+
+    const total = income - outcome;
+
+    const balance = {
+      income,
+      outcome,
+      total,
+    };
 
     return balance;
   }
