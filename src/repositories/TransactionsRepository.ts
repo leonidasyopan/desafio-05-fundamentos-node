@@ -26,7 +26,21 @@ class TransactionsRepository {
   }
 
   public getBalance(): Balance {
-    const balance = this.transactions.reduce((total, currentValue) => {});
+    this.transactions.map(transaction => {
+      let income = 0;
+      let outcome = 0;
+      if (transaction.type === 'income') {
+        income = Number(transaction.value).reduce((total, currentValue) => {
+          return total + currentValue;
+        });
+      } else {
+        outcome = Number(transaction.value).reduce((total, currentValue) => {
+          return total + currentValue;
+        });
+      }
+
+      return income - outcome;
+    });
 
     return balance;
   }
